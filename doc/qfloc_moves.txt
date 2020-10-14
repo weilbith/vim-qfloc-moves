@@ -1,0 +1,106 @@
+*qfloc_moves.txt*        Moving from, to or over quickfix and location windows
+
+Version:  0.1
+Author:   Thore Weilbier <thore@weilbier.net>
+License:  MIT
+
+==============================================================================
+					       *qfloc_moves_table_of_contents*
+TABLE OF CONTENTS~
+
+Introduction ...................................... |qfloc_moves_introduction|
+Usage .................................................... |qfloc_moves_usage|
+Commands ............................................. |qfloc_moves_functions|
+TODO-List ............................................ |qfloc_moves_todo_list|
+
+
+==============================================================================
+						    *qfloc_moves_introduction*
+INTRODUCTION~
+
+This is a minimal plugin that provides a couple of commands to make window
+movements around quickfix and location lists easier. Depending on the users
+workflow, there could be multiple of those windows open at the same time. And
+especially if you are using more complex window layouts, these windows can be
+either hard to reach or are just in the way of the movements to the "actual"
+windows. Also do the default commands eventually open empty and useless
+windows, being just a waste of time.
+
+
+==============================================================================
+							   *qfloc_moves_usage*
+USAGE~
+
+Just use the provided commands directly or bind them to keys. For example
+overwrite the default neighbor window movement bindings: >
+
+  noremap <silent> <C-w>h <cmd>Wincmd h<CR>
+  noremap <silent> <C-w>j <cmd>Wincmd j<CR>
+  noremap <silent> <C-w>k <cmd>Wincmd k<CR>
+  noremap <silent> <C-w>l <cmd>Wincmd l<CR>
+
+
+Note that all commands attempt to re-use the origin names of the native
+command they wrap just with the first letter in upper case.
+
+
+==============================================================================
+							*qfloc_moves_commands*
+COMMANDS~
+
+								      *:Copen*
+
+|:Copen|
+
+  Acts like |:copen|, but also jumps back again. Thereby it can be used to
+  have a single key binding for jumping into the quickfix window and back
+  again. It just depends on the current window the cursor is in.
+  The quickfix window gets opened if it is not yet. But if the quickfix list
+  is actually empty, it does not open the quickfix window and prints an error
+  message instead. This prevents the user from opening a useless window he has
+  to close again and get back where he came from.
+
+
+								      *:Lopen*
+
+|:Lopen|
+
+  Acts like |:lopen|, but also jumps back again. Thereby it can be used to
+  have a single key binding for jumping into the location window and back
+  again. It just depends on the current window the cursor is in.
+  The location window gets opened if it is not yet. But if the location list
+  is actually empty, it does not open the location window and prints an error
+  message instead. This prevents the user from opening a useless window he has
+  to close again and get back where he came from.
+
+
+								     *:Wincmd*
+
+|:Wincmd {arg}|
+
+  Acts like |:wincmd|, but ignores location windows. If the window movement as
+  defined by {arg} would make the user land in a location window, the movement
+  gets automatically repeat until landing in a "actual" window.
+  This comes handy when there are many windows with related location windows
+  open and the intention is to switch to a neighbor window that is not
+  a location list. Going to the location list is done by |:Lopen|.
+
+
+  Parameter:~
+
+    {arg}  - kind of window movement, directly forwarded to |:wincmd|
+
+
+  Note that this command does not (yet) support a prefixed count as the
+  original.
+
+
+==============================================================================
+						    *qfloc_moves_todo_list*
+TODO-List~
+
+  - add command count support for |:Wincmd| (origin also support window number)
+
+
+==============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl:
